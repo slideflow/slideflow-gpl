@@ -104,6 +104,7 @@ class Bottleneck(nn.Module):
 
         return out
 
+
 class NormedLinear(nn.Module):
 
     def __init__(self, in_features, out_features):
@@ -114,6 +115,7 @@ class NormedLinear(nn.Module):
     def forward(self, x):
         out = F.normalize(x, dim=1).mm(F.normalize(self.weight, dim=0))
         return out
+
 
 class ResNet50(nn.Module):
 

@@ -5,15 +5,15 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="slideflow_extras",
+    name="slideflow-extras",
     version=versioneer.get_version(),
     cmdclass=versioneer.get_cmdclass(),
     author="James Dolezal",
-    author_email="jamesmdolezal@gmail.com",
-    description="Deep learning tools for digital histology",
+    author_email="james@slideflow.ai",
+    description="Non-commercial extensions and tools for Slideflow.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/slideflow/slideflow_extras",
+    url="https://github.com/slideflow/slideflow-extras",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",

@@ -6,11 +6,6 @@ def histossl(**kwargs):
     return HistoSSLFeatures(**kwargs)
 
 @register_torch
-def plip(**kwargs):
-    from .plip import PLIPFeatures
-    return PLIPFeatures(**kwargs)
-
-@register_torch
 def ctranspath(**kwargs):
     from .ctranspath import CTransPathFeatures
     return CTransPathFeatures(**kwargs)
