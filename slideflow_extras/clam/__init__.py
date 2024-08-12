@@ -1,11 +1,11 @@
-from .config import CLAMModelConfig, CLAMTrainerConfig
+from .config import CLAMModelConfig, LegacyCLAMTrainerConfig
 
 from slideflow.mil import register_trainer, register_model
 
 
 @register_trainer
-def clam():
-    return CLAMTrainerConfig
+def legacy_clam():
+    return LegacyCLAMTrainerConfig
 
 @register_model
 def clam_sb():

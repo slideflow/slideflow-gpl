@@ -203,7 +203,9 @@ class CLAMModelConfig(MILModelConfig):
 
 # -----------------------------------------------------------------------------
 
-class CLAMTrainerConfig(TrainerConfig):
+class LegacyCLAMTrainerConfig(TrainerConfig):
+
+    tag = 'legacy_clam'
 
     def __init__(
         self,

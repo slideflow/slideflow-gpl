@@ -14,12 +14,12 @@ from slideflow.mil.eval import (
     predict_from_model, generate_attention_heatmaps, _export_attention
 )
 
-from ..config import CLAMTrainerConfig
+from ..config import LegacyCLAMTrainerConfig
 
 # -----------------------------------------------------------------------------
 
 def train_clam(
-    config: CLAMTrainerConfig,
+    config: LegacyCLAMTrainerConfig,
     train_dataset: Dataset,
     val_dataset: Dataset,
     outcomes: Union[str, List[str]],

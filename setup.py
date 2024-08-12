@@ -36,5 +36,6 @@ setuptools.setup(
         'huggingface_hub',
         'transformers',
         'fastai',
+        'scikit-misc'
     ]
 )
