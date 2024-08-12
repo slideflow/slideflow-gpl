@@ -10,7 +10,7 @@ setuptools.setup(
     cmdclass=versioneer.get_cmdclass(),
     author="James Dolezal",
     author_email="james@slideflow.ai",
-    description="Non-commercial extensions and tools for Slideflow.",
+    description="GPL-3 extensions and tools for Slideflow.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/slideflow/slideflow-gpl",

@@ -18,10 +18,6 @@
 
 from slideflow.model.extractors import register_torch
 
-@register_torch
-def histossl(**kwargs):
-    from .histossl import HistoSSLFeatures
-    return HistoSSLFeatures(**kwargs)
 
 @register_torch
 def ctranspath(**kwargs):
