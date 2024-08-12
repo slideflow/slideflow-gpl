@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="slideflow-extras",
+    name="slideflow-gpl",
     version=versioneer.get_version(),
     cmdclass=versioneer.get_cmdclass(),
     author="James Dolezal",
@@ -13,7 +13,7 @@ setuptools.setup(
     description="Non-commercial extensions and tools for Slideflow.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/slideflow/slideflow-extras",
+    url="https://github.com/slideflow/slideflow-gpl",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
@@ -22,7 +22,7 @@ setuptools.setup(
     ],
     entry_points={
         'slideflow.plugins': [
-            'extras = slideflow_extras:register_extras',
+            'extras = slideflow_gpl:register_extras',
         ],
     },
     python_requires='>=3.7',
