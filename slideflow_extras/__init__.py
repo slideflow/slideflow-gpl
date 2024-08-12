@@ -8,9 +8,5 @@ def register_extras():
         module = submodule.module_finder.find_spec(submodule.name).loader.load_module(submodule.name)
         sys.modules[f'slideflow.model.extractors.{submodule.name}'] = module
 
-    # Register BISCUIT
-    from . import biscuit
-    sys.modules['slideflow.biscuit'] = biscuit
-
     # Register CLAM
     from . import clam
