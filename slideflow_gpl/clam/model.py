@@ -497,7 +497,8 @@ class MIL_fc(nn.Module):
         gate: bool = True,
     ):
         super().__init__()
-        assert n_classes == 2
+        if n_classes != 2:
+            raise ValueError("The 'MIL_fc' model is a binary model that requires exactly 2 outcome categories.")
 
         self.size = self.sizes[size] if isinstance(size, str) else size
         fc = [nn.Linear(self.size[0], self.size[1]), nn.ReLU()]

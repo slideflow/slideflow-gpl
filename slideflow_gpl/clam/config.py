@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Slideflow-GPL. If not, see <https://www.gnu.org/licenses/>.
 
-from typing import Optional, TYPE_CHECKING
+from typing import Tuple, Optional, TYPE_CHECKING
 from slideflow import log, errors
 from slideflow.mil._params import MILModelConfig, TrainerConfig
 
@@ -174,6 +174,13 @@ class CLAMModelConfig(MILModelConfig):
                 "CLAM models do not support batch sizes > 1; setting batch_size to 1."
             )
             trainer.batch_size = 1
+
+    def inspect_batch(self, batch) -> Tuple[int, int]:
+        """Inspect a batch to determine the input and output dimensions.."""
+        bags, targets, _ = batch[0]
+        n_in = bags.shape[-1]
+        n_out = targets.shape[-1]
+        return n_in, n_out
 
     def _verify_eval_params(self, **kwargs):
         """Verify evaluation parameters."""
