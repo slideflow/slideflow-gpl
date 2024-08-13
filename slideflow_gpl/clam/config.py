@@ -151,10 +151,17 @@ class CLAMModelConfig(MILModelConfig):
     @property
     def loss_fn(self):
         from .legacy.utils import loss_utils
-        if self.model.startswith('clam'):
-            return loss_utils.CrossEntropyWithInstanceLoss
+        if self.bag_loss == 'ce':
+            if self.model.startswith('clam'):
+                return loss_utils.CrossEntropyWithInstanceLoss
+            else:
+                return loss_utils.CrossEntropyLoss
         else:
-            return loss_utils.CrossEntropyLoss
+            raise ValueError("Unrecognized bag loss: {}".format(self.bag_loss))
+
+    @property
+    def model_type(self):
+        return 'categorical'
 
     def get_metrics(self):
         from .legacy.utils import loss_utils
