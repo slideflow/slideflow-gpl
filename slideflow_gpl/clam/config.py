@@ -193,7 +193,7 @@ class CLAMModelConfig(MILModelConfig):
         dataset_kwargs = None,
         dataloader_kwargs = None
     ) -> "torch.utils.DataLoader":
-        from torch.utils.data import DataLoader
+        from fastai.vision.all import DataLoader
         from .data import build_clam_dataset
 
         dataset_kwargs = dataset_kwargs or dict()
