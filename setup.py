@@ -27,6 +27,7 @@ setuptools.setup(
     },
     python_requires='>=3.7',
     install_requires=[
+        'slideflow>=3.0'
         'numpy',
         'pillow>=6.0.0',
         'gdown',
@@ -36,6 +37,6 @@ setuptools.setup(
         'huggingface_hub',
         'transformers',
         'fastai',
-        'scikit-misc'
+        'scikit-misc',
     ]
 )
