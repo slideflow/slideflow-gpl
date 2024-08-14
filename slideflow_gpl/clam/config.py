@@ -291,12 +291,12 @@ class LegacyCLAMTrainerConfig(TrainerConfig):
             n_classes (int): Number of outcome classes. Defaults to None.
             micro_average (bool): Use micro averaging when calculate AUROC.
             **kwargs: All additional keyword arguments are passed to
-                :class:`slideflow.mil.ModelConfigCLAM`.
+                :class:`slideflow.mil.CLAMModelConfig`.
         """
         for argname, argval in dict(locals()).items():
             if argname != 'kwargs':
                 setattr(self, argname, argval)
-        self.model_config = ModelConfigCLAM(**kwargs)
+        self.model_config = CLAMModelConfig(**kwargs)
 
     def _to_clam_args(self):
         """Convert into CLAM_Args format (legacy support)."""
