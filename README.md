@@ -51,14 +51,6 @@ config = sf.mil.mil_config('clam_mb', epochs=20, lr=1e-4)
 
 Please see the [Slideflow docs](https://slideflow.dev/mil/) for more information on MIL models.
 
-#### CLAM - Legacy Trainer
-
-The legacy CLAM trainer, which has been superseded by Slideflow's FastAI trainer, can still be used if desired. To use this trainer instead of the default FastAI framework, set the argument `trainer='legacy_clam'`:
-
-```python
-config = sf.mil.mil_config('clam_mb', trainer='legacy_clam', ...)
-```
-
 ## License
 This code is made available under the GPLv3 License.
 
