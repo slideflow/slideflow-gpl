@@ -26,7 +26,6 @@ import torch.nn.functional as F
 import torch.nn as nn
 
 from torch.nn import Parameter
-from torchvision import transforms
 from huggingface_hub import hf_hub_download
 
 from slideflow.model.extractors._factory_torch import TorchFeatureExtractor
@@ -309,13 +308,10 @@ class RetCCLFeatures(TorchFeatureExtractor):
 }
 """
 
-    def __init__(self, device=None, center_crop=False, resize=False, ckpt=None, **kwargs):
+    def __init__(self, device=None, ckpt=None, **kwargs):
         super().__init__(**kwargs)
 
         from slideflow.model import torch_utils
-
-        if center_crop and resize:
-            raise ValueError("center_crop and resize cannot both be True.")
 
         self.device = torch_utils.get_device(device)
         self.model = ResNet50(
@@ -341,22 +337,8 @@ class RetCCLFeatures(TorchFeatureExtractor):
 
         # ---------------------------------------------------------------------
         self.num_features = 2048
-        if center_crop:
-            all_transforms = [transforms.CenterCrop(256)]
-        elif resize:
-            all_transforms = [transforms.Resize(256)]
-        else:
-            all_transforms = []
-        all_transforms += [
-            transforms.Lambda(lambda x: x / 255.),
-            transforms.Normalize(
-                mean=(0.485, 0.456, 0.406),
-                std=(0.229, 0.224, 0.225)),
-        ]
-        self.transform = transforms.Compose(all_transforms)
+        self.transform = self.build_transforms(img_size=256)
         self.preprocess_kwargs = dict(standardize=False)
-        self._center_crop = center_crop
-        self._resize = resize
         # ---------------------------------------------------------------------
 
     def dump_config(self):
@@ -370,7 +352,6 @@ class RetCCLFeatures(TorchFeatureExtractor):
         return {
             'class': f'slideflow.model.extractors.retccl.{cls_name}',
             'kwargs': {
-                'center_crop': self._center_crop,
-                'resize': self._resize
+                **self.transform_kwargs
             }
         }
