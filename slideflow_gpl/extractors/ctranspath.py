@@ -652,9 +652,6 @@ class CTransPathFeatures(TorchFeatureExtractor):
         feature extractor, using ``slideflow.build_feature_extractor()``.
 
         """
-        return {
-            'class': 'slideflow.model.extractors.ctranspath.CTransPathFeatures',
-            'kwargs': {
-                **self.transform_kwargs
-            }
-        }
+        return self._dump_config(
+            class_name=f'slideflow.model.extractors.ctranspath.{self.__class__.__name__}',
+        )

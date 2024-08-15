@@ -348,10 +348,6 @@ class RetCCLFeatures(TorchFeatureExtractor):
         feature extractor, using ``slideflow.build_feature_extractor()``.
 
         """
-        cls_name = self.__class__.__name__
-        return {
-            'class': f'slideflow.model.extractors.retccl.{cls_name}',
-            'kwargs': {
-                **self.transform_kwargs
-            }
-        }
+        return self._dump_config(
+            class_name=f'slideflow.model.extractors.retccl.{self.__class__.__name__}',
+        )
