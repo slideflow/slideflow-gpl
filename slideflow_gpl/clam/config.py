@@ -18,7 +18,7 @@
 
 from typing import Tuple, Optional, TYPE_CHECKING
 from slideflow import log, errors
-from slideflow.mil._params import MILModelConfig, TrainerConfig
+from slideflow.mil import MILModelConfig, TrainerConfig
 
 if TYPE_CHECKING:
     import torch
