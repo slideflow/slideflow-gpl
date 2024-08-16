@@ -161,7 +161,7 @@ class CLAMModelConfig(MILModelConfig):
 
     @property
     def model_type(self):
-        return 'categorical'
+        return 'classification'
 
     def get_metrics(self):
         from .legacy.utils import loss_utils

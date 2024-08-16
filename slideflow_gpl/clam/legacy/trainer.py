@@ -185,7 +185,7 @@ def train_clam(
         columns={c: f"{outcome_name}-{c}" for c in df.columns if c != 'slide'},
         inplace=True
     )
-    sf.stats.metrics.categorical_metrics(df, level='slide', data_dir=outdir)
+    sf.stats.metrics.classification_metrics(df, level='slide', data_dir=outdir)
 
     # Attention heatmaps
     if isinstance(bags, str):
