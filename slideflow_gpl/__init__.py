@@ -28,3 +28,4 @@ def register_extras():
 
     # Register CLAM
     from . import clam
+    sys.modules['slideflow.clam'] = clam

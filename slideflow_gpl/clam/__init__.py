@@ -18,12 +18,8 @@
 
 from .config import CLAMModelConfig, LegacyCLAMTrainerConfig
 
-from slideflow.mil import register_trainer, register_model
+from slideflow.mil import register_model
 
-
-@register_trainer
-def legacy_clam():
-    return LegacyCLAMTrainerConfig
 
 @register_model(config=CLAMModelConfig)
 def clam_sb():

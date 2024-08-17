@@ -16,8 +16,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Slideflow-GPL. If not, see <https://www.gnu.org/licenses/>.
 
-from typing import Tuple, Optional, TYPE_CHECKING
-from slideflow import log, errors
+import slideflow as sf
+from typing import Union, List, Tuple, Optional, TYPE_CHECKING
+from slideflow import log, errors, Dataset
 from slideflow.mil import MILModelConfig, TrainerConfig
 
 if TYPE_CHECKING:
@@ -310,9 +311,38 @@ class LegacyCLAMTrainerConfig(TrainerConfig):
         del all_kw['model_kwargs']
         return CLAM_Args(**all_kw)
 
-    def get_trainer(self):
+    def train(
+        self,
+        train_dataset: Dataset,
+        val_dataset: Optional[Dataset],
+        outcomes: Union[str, List[str]],
+        bags: Union[str, List[str]],
+        *,
+        outdir: str = 'mil',
+        exp_label: Optional[str] = None,
+        **kwargs
+    ):
         from .legacy.trainer import train_clam
-        return train_clam
+
+        # Prepare output directory
+        outdir = self.prepare_training(outcomes, exp_label, outdir)
+
+        # Use training data as validation if no validation set is provided
+        if val_dataset is None:
+            sf.log.info(
+                "Training without validation; metrics will be calculated on training data."
+            )
+            val_dataset = train_dataset
+
+        return train_clam(
+            self,
+            train_dataset,
+            val_dataset,
+            outcomes,
+            bags,
+            outdir=outdir,
+            **kwargs
+        )
 
     def _verify_eval_params(self, **kwargs):
         """Verify evaluation parameters."""

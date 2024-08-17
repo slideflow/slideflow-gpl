@@ -28,9 +28,8 @@ from slideflow.util import path_to_name
 from os.path import join
 
 from slideflow.mil.train import _log_mil_params
-from slideflow.mil.eval import (
-    predict_from_model, generate_attention_heatmaps, _export_attention
-)
+from slideflow.mil.eval import predict_mil, generate_attention_heatmaps
+from slideflow.mil.utils import _export_attention
 
 from ..config import LegacyCLAMTrainerConfig
 
@@ -166,7 +165,7 @@ def train_clam(
     )
 
     # Generate validation predictions
-    df, attention = predict_from_model(
+    df, attention = predict_mil(
         model,
         config,
         dataset=val_dataset,
