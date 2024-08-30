@@ -50,14 +50,14 @@ def to_2tuple(x):
 
 
 def _window_partition(mask, window_size):
-    if version.parse(timm_version) < version.parse("1.0"):
+    if version.parse(timm_version) < version.parse("0.9.6"):
         return window_partition(mask, window_size)
     else:
         return window_partition(mask, to_2tuple(window_size))
 
 
 def _window_reverse(mask, window_size, *args, **kwargs):
-    if version.parse(timm_version) < version.parse("1.0"):
+    if version.parse(timm_version) < version.parse("0.9.6"):
         return window_reverse(mask, window_size, *args, **kwargs)
     else:
         return window_reverse(mask, to_2tuple(window_size), *args, **kwargs)
