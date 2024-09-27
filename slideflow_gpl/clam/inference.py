@@ -45,13 +45,9 @@ def run_inference(
     y_pred = []
     y_att  = []
     device = mil_utils._detect_device(model, device, verbose=True)
-    for bag in bags:
-        if mil_utils._is_list_of_paths(bag):
-            # If bags are passed as a list of paths, load them individually.
-            loaded = torch.cat([mil_utils._load_bag(b).to(device) for b in bag], dim=0)
-        else:
+    with torch.inference_mode():
+        for bag in bags:
             loaded = mil_utils._load_bag(bag).to(device)
-        with torch.inference_mode():
             logits, att = model(loaded, **clam_kw)
             if attention:
                 y_att.append(np.squeeze(att.cpu().numpy()))
