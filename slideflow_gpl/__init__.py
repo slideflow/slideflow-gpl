@@ -17,15 +17,49 @@
 # along with Slideflow-GPL. If not, see <https://www.gnu.org/licenses/>.
 
 import sys
+import types
+import importlib
 import pkgutil
 
-def register_extras():
-    # Register the additional pretrained feature extractors
-    from . import extractors
-    for submodule in pkgutil.iter_modules(extractors.__path__):
-        module = submodule.module_finder.find_spec(submodule.name).loader.load_module(submodule.name)
-        sys.modules[f'slideflow.model.extractors.{submodule.name}'] = module
 
-    # Register CLAM
+def _register_lazy_alias(alias, target):
+    """Expose ``target`` under the back-compat import path ``alias`` without
+    importing it. The real module (and its heavy deps, e.g. torch) is loaded on
+    first attribute access, after which ``alias`` resolves to the real module."""
+    if alias in sys.modules:
+        return
+
+    class _LazyAlias(types.ModuleType):
+        def __getattr__(self, attr):
+            real = importlib.import_module(target)
+            sys.modules[alias] = real
+            return getattr(real, attr)
+
+    sys.modules[alias] = _LazyAlias(alias)
+
+
+def register_extras():
+    """Register slideflow-gpl's feature extractors and CLAM MIL models.
+
+    Invoked at ``import slideflow`` time via the 'slideflow.plugins' entry point,
+    so it deliberately avoids importing heavy model code. Importing the
+    subpackages only runs their registration decorators (``@register_torch`` /
+    ``@register_model``), which store lightweight factory callables; each factory
+    imports its heavy modules lazily, only when the extractor/model is built.
+    """
+    # Feature extractors: registers the `ctranspath` / `retccl` factories.
+    from . import extractors
+
+    # Back-compat direct-import paths (e.g. `slideflow.model.extractors.ctranspath`),
+    # resolved lazily so torch is not pulled in at registration time.
+    for submodule in pkgutil.iter_modules(extractors.__path__):
+        _register_lazy_alias(
+            f'slideflow.model.extractors.{submodule.name}',
+            f'{extractors.__name__}.{submodule.name}',
+        )
+
+    # CLAM MIL models: importing the subpackage runs the @register_model
+    # decorators. The torch model definitions are imported lazily by the
+    # factories; this import only pulls in config (no torch).
     from . import clam
-    sys.modules['slideflow.clam'] = clam
+    sys.modules.setdefault('slideflow.clam', clam)

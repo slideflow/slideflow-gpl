@@ -27,7 +27,28 @@ import torch.nn.functional as F
 from typing import Union, List, Optional, Callable
 
 from slideflow.model.torch_utils import get_device
-from slideflow.mil.models._utils import initialize_weights
+
+# -----------------------------------------------------------------------------
+
+
+def initialize_weights(module):
+    """Initialize Linear / BatchNorm1d weights.
+
+    Vendored from the now-removed ``slideflow.mil.models._utils`` so CLAM stays
+    self-contained against slideflow's MIL refactor.
+    """
+    for m in module.modules():
+        if isinstance(m, nn.Linear):
+            nn.init.xavier_normal_(m.weight)
+            if m.bias is not None:
+                m.bias.data.zero_()
+
+        elif isinstance(m, nn.BatchNorm1d):
+            if m.weight is not None:
+                nn.init.constant_(m.weight, 1)
+            if m.bias is not None:
+                nn.init.constant_(m.bias, 0)
+
 
 # -----------------------------------------------------------------------------
 
