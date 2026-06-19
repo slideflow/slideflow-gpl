@@ -36,7 +36,6 @@ setuptools.setup(
         'timm',
         'huggingface_hub',
         'transformers',
-        'fastai',
-        'scikit-misc',
+        'fastai'
     ]
 )
