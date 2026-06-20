@@ -25,6 +25,40 @@ if TYPE_CHECKING:
     import torch
 
 
+def _validate_bags_arg(bags) -> None:
+    """Validate that ``bags`` is an iterable of bags, not a single bag.
+
+    :func:`run_inference` iterates ``for bag in bags``, treating each element as
+    one slide's bag of shape ``(n_tiles, n_features)``. A bare 2-D tensor/array
+    (i.e. a single bag) would instead be iterated tile-by-tile, feeding 1-D
+    vectors into the model and failing deep in the forward pass with an opaque
+    ``IndexError``. Catch that misuse here with an actionable message.
+    """
+    import torch
+
+    # A Python list (of paths/tensors/arrays), or an ndarray of bag-path
+    # strings, is always a valid collection of bags — iterating yields one bag
+    # per element.
+    if isinstance(bags, list) or mil_utils._is_list_of_paths(bags):
+        return
+
+    # A *numeric* tensor/array is a collection of bags only when it carries an
+    # outer bag dimension: shape (n_bags, n_tiles, n_features). A bare 2-D
+    # (single bag) or 1-D array, iterated, yields per-tile vectors, so reject it.
+    is_tensor = isinstance(bags, torch.Tensor)
+    is_numeric_array = (
+        isinstance(bags, np.ndarray) and np.issubdtype(bags.dtype, np.number)
+    )
+    if (is_tensor or is_numeric_array) and bags.ndim < 3:
+        raise ValueError(
+            "`bags` must be an iterable of bags — a list of bag tensors/paths, "
+            "or a 3-D tensor of shape (n_bags, n_tiles, n_features). Got a "
+            f"{bags.ndim}-D {type(bags).__name__} of shape {tuple(bags.shape)}, "
+            "which looks like a single bag. If you have one bag, wrap it in a "
+            "list: predict(model, [bag])."
+        )
+
+
 def run_inference(
     model: "torch.nn.Module",
     bags: Union[np.ndarray, List[str]],
@@ -35,6 +69,8 @@ def run_inference(
 
     import torch
     from .model import CLAM_MB, CLAM_SB
+
+    _validate_bags_arg(bags)
 
     if isinstance(model, (CLAM_MB, CLAM_SB)):
         clam_kw = dict(return_attention=True, return_instance_loss=False)
