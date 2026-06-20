@@ -254,6 +254,14 @@ class _CLAM_Base(nn.Module):
             h, label, instance_eval = h
         if h.ndim == 3:
             h = h.squeeze()
+        if h.ndim != 2:
+            raise RuntimeError(
+                f"CLAM models expect a 2-D bag tensor of shape "
+                f"(n_tiles, n_features); got a {h.ndim}-D tensor of shape "
+                f"{tuple(h.shape)}. When generating predictions, pass an "
+                f"iterable of bags (e.g. a list of bag tensors) to "
+                f"predict()/run_inference(), not a single bag."
+            )
         if h.shape[1] != self.size[0]:
             raise RuntimeError(
                 f"Input feature size ({h.shape[1]}) does not match size of "
